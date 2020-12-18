@@ -5,11 +5,11 @@ import json
 import datetime
 import calendar
 from dateutil.relativedelta import relativedelta
-
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import subprocess
+import time
 
 
 def get_credentials(credential_name):
@@ -21,9 +21,8 @@ def timestamp():
 
 
 def callback_tan_push():
-    m_tan = input("Please press ENTER after confirming push-tan ")
-    m_tan = "123456"
-    return m_tan
+    #user has 30 seconds to confirm push tan.
+    time.sleep(30)    
 
 
 def authenticate_api():
@@ -361,3 +360,4 @@ chart_name = create_graph(finance_data)
 telegram_bot_send_text(current_month_report(finance_data))
 send_image(chart_name)
 delete_chart_image(chart_name)
+print(current_month_report(finance_data))
