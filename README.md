@@ -1,5 +1,7 @@
-# readme boilerplate
+# comdirect financial report
 this script generates an overview diagramm of your last 5 month income/expenses with the help of comdirect-rest api. you will be notified via telegram. very handy is a ssh shortcut on your phone in order to trigger the script on the fly. right now only pushtan is implemented. feel free to adapt the script to your needs.
+
+![comdirect financial report](https://github.com/phpanhey/comdirect_financialreport/blob/master/example_chart.jpg?raw=true)
 
 # usage 
 ```shell
