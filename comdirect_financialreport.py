@@ -321,7 +321,7 @@ def telegram_bot_send_text(bot_message):
     return response.json()
 
 
-def send_image(image_name):
+def telegram_bot_send_image(image_name):
     command = (
         "curl -s -X POST https://api.telegram.org/bot"
         + get_credentials("telegram")["bot_token"]
@@ -358,6 +358,5 @@ access_credentials = authenticate_api()
 finance_data = calculate_finance_report_data(access_credentials)
 chart_name = create_graph(finance_data)
 telegram_bot_send_text(current_month_report(finance_data))
-send_image(chart_name)
+telegram_bot_send_image(chart_name)
 delete_chart_image(chart_name)
-print(current_month_report(finance_data))
