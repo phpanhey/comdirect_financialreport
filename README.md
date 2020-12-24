@@ -28,6 +28,7 @@ the script depends on a `config.json` on its root directory in order to work pro
 pip3 install python-dateutil
 pip3 install matplotlib
 ```
+furthermore ``curl`` is required on command line.
 
 ## thanks
 thanks [keisentraut](https://github.com/keisentraut/python-comdirect-api) for oauth implementation.
