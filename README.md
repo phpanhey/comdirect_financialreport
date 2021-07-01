@@ -28,6 +28,7 @@ here's an example of the config.
 ```sh
 pip3 install python-dateutil
 pip3 install matplotlib
+pip3 install argparse
 ```
 furthermore ``curl`` is required on command line.
 
