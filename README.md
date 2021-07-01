@@ -10,6 +10,7 @@ python3 comdirect_financialreport.py
 ## config
 as a default the script depends on a `config.json` on its root directory in order to work properly. additionally a custom config can be specified as a param like so: `python3 comdirect_financialreport.py custom_config.json`. in order to use the comdirect api you need to register [here](https://www.comdirect.de/cms/kontakt-zugaenge-api.html).
 
+here's an example of the config.
 ```json
 {
     "username": "comdirect_user_name",
