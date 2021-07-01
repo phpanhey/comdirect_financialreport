@@ -10,10 +10,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import subprocess
 import time
+import argparse
 
 
 def get_credentials(credential_name):
-    return json.loads(open("config.json", "r").read())[credential_name]
+    return json.loads(open(get_config_name(), "r").read())[credential_name]
+
+
+def get_config_name():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("config_name", nargs="?")
+    config_name = parser.parse_args().config_name
+    if not config_name:
+        config_name = "config.json"
+    return config_name
 
 
 def timestamp():
@@ -21,8 +31,8 @@ def timestamp():
 
 
 def callback_tan_push():
-    #user has 30 seconds to confirm push tan.
-    time.sleep(30)    
+    # user has 30 seconds to confirm push tan.
+    time.sleep(30)
 
 
 def authenticate_api():
@@ -349,6 +359,7 @@ def current_month_report(finance_data):
         + str(current_month["saldo"])
         + " €"
     )
+
 
 def delete_chart_image(chart_name):
     os.remove(chart_name)
