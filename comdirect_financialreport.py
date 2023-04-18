@@ -367,7 +367,53 @@ def delete_chart_image(chart_name):
 
 access_credentials = authenticate_api()
 finance_data = calculate_finance_report_data(access_credentials)
-chart_name = create_graph(finance_data)
-telegram_bot_send_text(current_month_report(finance_data))
-telegram_bot_send_image(chart_name)
-delete_chart_image(chart_name)
+# chart_name = create_graph(finance_data)
+# telegram_bot_send_text(current_month_report(finance_data))
+# telegram_bot_send_image(chart_name)
+# delete_chart_image(chart_name)
+
+
+# ----------------------------------------------------------------------------------------
+# test
+
+stamp = datetime.datetime.now()
+transactions = get_month_transactions(access_credentials, stamp)
+
+
+import pandas as pd
+
+def convert2dataframe(transactions, clm):
+    df = []
+    for transaction in transactions:
+        text = ''
+        if transaction['remitter'] is not None:
+            # text += 'Auftraggeber: ' + transaction['remitter']['holderName'] + ' '
+            text += transaction['remitter']['holderName'] + ' ' 
+        if transaction['creditor'] is not None:
+            # text += 'Empfänger: ' + transaction['creditor']['holderName'] + ' '
+            text += transaction['creditor']['holderName'] + ' '
+        # text += 'Buchungstext: ' + transaction['remittanceInfo'] + ' '
+        text += transaction['remittanceInfo'] + ' '
+        # text += 'Ref. ' + transaction['reference']
+
+        df.append([ transaction['bookingDate'], transaction['transactionType']['text'], text, transaction["amount"]["value"] ])
+    
+    df = pd.DataFrame(df, columns=[clm['date'], clm['type'], clm['text'], clm['amount']])
+
+    df[clm['date']]   = pd.to_datetime( df[clm['date']] , format='%Y-%m-%d', errors='coerce' )
+    df[clm['amount']] = df[clm['amount']].astype(float)
+
+    df = df.sort_values(by=[clm['date']], ascending=False)
+    return df
+
+
+clm = dict(
+    date     = 'Datum'        ,
+    type     = 'Vorgang'      ,
+    text     = 'Buchungstext' ,
+    amount   = 'Betrag'       ,
+    )
+
+df = convert2dataframe(transactions, clm)
+
+print(df.head(10))
