@@ -183,30 +183,21 @@ def get_accountId(access_credentials):
             return account["account"]["accountId"]
 
 
-def get_transactions(access_credentials, start_date, end_date):
+def get_month_transactions(access_credentials, date_obj):
     account_id = access_credentials["account_id"]
+    last_day = calendar.monthrange(date_obj.year, date_obj.month)[1]
+
     res = []
-
-    while start_date <= end_date:
-        start_date_str = start_date.strftime("%Y-%m-%d")
-        res = (
-            res
-            + get_authorized(
-                access_credentials,
-                f"https://api.comdirect.de/api/banking/v1/accounts/{account_id}/transactions?min-bookingDate={start_date_str}&max-bookingDate={start_date_str}&transactionState=BOOKED",
-            ).json()["values"]
+    for day in range(1, last_day + 1):
+        start_date_str = datetime.date(date_obj.year, date_obj.month, day).strftime('%Y-%m-%d')
+        res.append(
+            get_authorized(
+            access_credentials,
+            f"https://api.comdirect.de/api/banking/v1/accounts/{account_id}/transactions?min-bookingDate={start_date_str}&max-bookingDate={start_date_str}&transactionState=BOOKED"
+        ).json()["values"]
         )
-        start_date += datetime.timedelta(days=1)
 
-    return res
-
-
-def get_date_object(german_date_string):
-    return datetime.date(
-        int(german_date_string.split(".")[2]),
-        int(german_date_string.split(".")[1]),
-        int(german_date_string.split(".")[0]),
-    )
+    return [item for sublist in res for item in sublist]
 
 
 def calculate_spend_money(transactions):
@@ -227,17 +218,6 @@ def calculate_earned_money(transactions):
             sum += val
 
     return round(sum, 2)
-
-
-def get_month_transactions(access_credentials, date_obj):
-    year = int(datetime.datetime.now(datetime.timezone.utc).strftime("%Y"))
-    last_day = calendar.monthrange(year, date_obj.month)[1]
-
-    return get_transactions(
-        access_credentials,
-        get_date_object(f"01.{date_obj.month}.{year}"),
-        get_date_object(f"{last_day}.{date_obj.month}.{year}"),
-    )
 
 
 def calculate_finance_report_data(access_credentials):
