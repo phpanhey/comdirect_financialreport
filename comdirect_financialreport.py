@@ -374,7 +374,7 @@ def main():
     finance_data = calculate_finance_report_data(access_credentials)
     chart_name = create_graph(finance_data)
     base64_chart = create_base64_chart(chart_name)
-    print(base64_chart)
+    print(base64_chart.decode('utf-8'))
 
 if __name__ == "__main__":
     main()
