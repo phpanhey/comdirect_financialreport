@@ -11,7 +11,7 @@ import numpy as np
 import subprocess
 import time
 import argparse
-
+import base64
 
 def get_credentials(credential_name):
     return json.loads(open(get_config_name(), "r").read())[credential_name]
@@ -365,9 +365,13 @@ def delete_chart_image(chart_name):
     os.remove(chart_name)
 
 
+def create_base64_chart(chart_name):
+    with open(chart_name, "rb") as image_file:
+        return base64.b64encode(image_file.read())
+
+
 access_credentials = authenticate_api()
 finance_data = calculate_finance_report_data(access_credentials)
 chart_name = create_graph(finance_data)
-telegram_bot_send_text(current_month_report(finance_data))
-telegram_bot_send_image(chart_name)
-delete_chart_image(chart_name)
+base64_chart = create_base64_chart(chart_name)
+print(base64_chart)
