@@ -368,10 +368,13 @@ def delete_chart_image(chart_name):
 def create_base64_chart(chart_name):
     with open(chart_name, "rb") as image_file:
         return base64.b64encode(image_file.read())
+    
+def main():
+    access_credentials = authenticate_api()
+    finance_data = calculate_finance_report_data(access_credentials)
+    chart_name = create_graph(finance_data)
+    base64_chart = create_base64_chart(chart_name)
+    print(base64_chart)
 
-
-access_credentials = authenticate_api()
-finance_data = calculate_finance_report_data(access_credentials)
-chart_name = create_graph(finance_data)
-base64_chart = create_base64_chart(chart_name)
-print(base64_chart)
+if __name__ == "__main__":
+    main()
